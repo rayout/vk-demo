@@ -14,6 +14,12 @@ Class Route {
         '{any}'     => '([^/]+)',
     ];
 
+    /**
+     * Запуск роутинга
+     *
+     * @return mixed
+     * @throws \Exception
+     */
     public function start()
     {
         $currentUrl = self::getCurrentUrl();
@@ -31,18 +37,32 @@ Class Route {
         echo 'WOW 404!!';
     }
 
+    /**
+     * Добавление роута GET
+     */
     public static function get()
     {
         $arguments = func_get_args();
         static::addRoute('GET', $arguments);
     }
 
+    /**
+     * Добавление роута POST
+     */
     public static function post()
     {
         $arguments = func_get_args();
         static::addRoute('POST', $arguments);
     }
 
+    /**
+     * Запуск роута на исполнение
+     *
+     * @param $route
+     * @param $params
+     * @return mixed
+     * @throws \Exception
+     */
     private function loadRoute($route, $params)
     {
         if ($route['call'] instanceof \Closure) {
@@ -57,21 +77,37 @@ Class Route {
         call_user_func_array([new $class, $method], array_values($params));
     }
 
+    /**
+     * @return null|string|string[]
+     */
     public static function getCurrentUrl()
     {
         return static::normalizeUrl($_SERVER['REQUEST_URI']);
     }
 
+    /**
+     * @return mixed
+     */
     public static function getRequestMethod()
     {
         return $_SERVER['REQUEST_METHOD'];
     }
 
+    /**
+     * Убтирает последний слэш и добавляет первый
+     *
+     * @param $url
+     * @return null|string|string[]
+     */
     private static function normalizeUrl($url)
     {
         return preg_replace('#^(/?)(.*)/$#', '/$2', $url);
     }
 
+    /**
+     * @param $method
+     * @param $arguments
+     */
     private static function addRoute($method, $arguments)
     {
         $collection = static::loadArgs($arguments);
@@ -83,6 +119,10 @@ Class Route {
         ];
     }
 
+    /**
+     * @param array $arguments
+     * @return array
+     */
     private static function loadArgs(array $arguments)
     {
         return [
