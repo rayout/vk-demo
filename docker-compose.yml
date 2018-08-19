@@ -1,0 +1,38 @@
+### Nginx Server Container ##################################
+version: "2"
+
+services:
+  web:
+    image: tain/nginx-phpfpm
+    volumes:
+    - ./nginx.conf:/site.conf
+    - .:/var/www:cached
+    expose:
+    - "80"
+    labels:
+      traefik.frontend.rule: "Host:${HOST}"
+      traefik.port: "80"
+    network_mode: "bridge"
+    dns:
+    - 172.17.0.1
+    environment:
+    - ENV_NGINX_HOST=${HOST}
+    - ENV_NGINX_PUBLIC_PATH=${PUBLIC_PATH}
+
+    ### MySQL ################################################
+  mysql:
+    build:
+      context: ./docker/mysql
+    environment:
+    - MYSQL_DATABASE=default
+    - MYSQL_USER=default_user
+    - MYSQL_PASSWORD=default_pass
+    - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+    - mysql_vol:/var/lib/mysql
+    ports:
+    - "3306:3306"
+
+volumes:
+  mysql_vol:
+    driver: "local"
