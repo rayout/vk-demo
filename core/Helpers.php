@@ -12,6 +12,11 @@ function config()
         ->buildClass('config');
 }
 
+function route()
+{
+    return app()->buildClass('Route');
+}
+
 function dd()
 {
     $args = func_get_args();

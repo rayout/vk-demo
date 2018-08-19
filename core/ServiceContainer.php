@@ -52,7 +52,7 @@ class ServiceContainer
     public function buildClass($key, $params = null)
     {
         if (!array_key_exists($key, $this->bindings)) {
-            throw new \Exception('`Class not found`...');
+            throw new \Exception("`Class $key not found`...");
         }
 
         return $this->instance($this->bindings[$key]['object'], $params);

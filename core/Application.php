@@ -8,5 +8,9 @@ class Application
     {
         // Загружаем классы в приложение из app
         app()->loadClasses(config()->get('app.required'));
+
+        // запускаем роуты
+        require_once '../app/routes.php';
+        (new Route)->start();
     }
 }
