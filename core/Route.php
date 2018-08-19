@@ -74,7 +74,15 @@ Class Route {
             throw new \Exception($class . ' not found when load route ' . $route['url']);
         }
 
-        call_user_func_array([new $class, $method], array_values($params));
+        $next = [new Request(), new Response()];
+        if(!empty($route['middleware'])){
+            foreach($route['middleware'] as $middleware) {
+                $middleware = new $middleware(...$next);
+                $next = $middleware->run();
+            }
+        }
+
+        call_user_func_array([new $class, $method], array_values(array_merge($next, $params)));
     }
 
     /**

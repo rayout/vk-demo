@@ -2,7 +2,6 @@
 
 route()::get(
     '/', 'App\Controllers\MainController@index', [
-    'middleware' => [
-        'auth'
-    ],
-]);
+        App\Middleware\AuthMiddleware::class
+    ]
+);
