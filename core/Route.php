@@ -91,7 +91,7 @@ Class Route {
      */
     public static function getCurrentUrl()
     {
-        return static::normalizeUrl($_SERVER['REQUEST_URI']);
+        return static::normalizeUrl(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     }
 
     /**

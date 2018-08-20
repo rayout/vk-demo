@@ -3,7 +3,8 @@
 return [
     // Классы которые будут загружены при запуске приложения
     'required' => [
-        '\Core\Config',
-        '\Core\Route',
+        \Core\Config::class,
+        \Core\Route::class,
+        \Core\Auth::class,
     ],
 ];

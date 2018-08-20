@@ -23,7 +23,6 @@ class Response
         http_response_code($code);
         return $this;
     }
-    /**
 
     /**
      * @param $key
@@ -35,7 +34,6 @@ class Response
         $this->setHeader('Content-Type', $key);
         return $this;
     }
-    /**
 
     /**
      * @param $key
@@ -66,7 +64,7 @@ class Response
     {
         $this->setContent('application/json');
         $this->setResponseCode($code);
-        return json_encode($data);
+        echo json_encode($data);
     }
 
 }

@@ -5,3 +5,7 @@ route()::get(
         App\Middleware\AuthMiddleware::class
     ]
 );
+
+route()::get(
+    '/login', 'App\Controllers\AuthController@login'
+);

@@ -5,6 +5,10 @@ function app()
     return \Core\ServiceContainer::getInstance();
 }
 
+/**
+ * @return \Core\Config
+ * @throws Exception
+ */
 function config()
 {
     return app()
@@ -12,10 +16,24 @@ function config()
         ->buildClass('config');
 }
 
+/**
+ * @return \Core\Response
+ * @throws Exception
+ */
 function route()
 {
     return app()->buildClass('Route');
 }
+
+/**
+ * @return \Core\Auth
+ * @throws Exception
+ */
+function auth()
+{
+    return app()->singleton('Auth');
+}
+
 
 function dd()
 {

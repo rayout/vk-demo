@@ -11,10 +11,10 @@ class Config
      */
     public function load($filename)
     {
-        if (file_exists("../app/config/$filename.php")) {
-           return include("../app/config/$filename.php");
+        if (file_exists(dirname(__FILE__) . "/../app/config/$filename.php")) {
+           return include(dirname(__FILE__) . "/../app/config/$filename.php");
         } else {
-            throw new \Exception('Config' . $filename . ' not found');
+            throw new \Exception('Config ' . $filename . ' not found');
         }
     }
 
@@ -29,7 +29,12 @@ class Config
      */
     public function get($key, $default = null)
     {
-        list($file, $key) = explode('.', $key, 2);
+        if(strpos($key, '.') !== false) {
+            list($file, $key) = explode('.', $key, 2);
+        }else{
+            $file = $key;
+            $key = null;
+        }
         $array = $this->load($file);
 
         if (!$this->accessible($array)) {

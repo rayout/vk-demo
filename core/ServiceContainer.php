@@ -30,13 +30,13 @@ class ServiceContainer
 
     /**
      * @param $key
-     * @param $object
+     * @param $class
      *
      * @return $this
      */
-    public function set($key, $object)
+    public function set($key, $class)
     {
-        $this->bindings[$key] = compact('object');
+        $this->bindings[$key] = compact('class');
 
         return $this;
     }
@@ -55,7 +55,19 @@ class ServiceContainer
             throw new \Exception("`Class $key not found`...");
         }
 
-        return $this->instance($this->bindings[$key]['object'], $params);
+        return $this->instance($this->bindings[$key]['class'], $params);
+    }
+
+    public function singleton($key, $params = null)
+    {
+        if (!array_key_exists($key, $this->bindings)) {
+            throw new \Exception("`Class $key not found`...");
+        }
+
+        if(empty($this->bindings[$key]['object'])){
+            $this->bindings[$key]['object'] = $this->instance($this->bindings[$key]['class'], $params);
+        }
+        return $this->bindings[$key]['object'];
     }
 
     /**
@@ -67,7 +79,7 @@ class ServiceContainer
     {
         foreach ($classes as $k) {
             $name = explode('\\', $k);
-            $this->set(end($name), $k)->instance($k);
+            $this->set(end($name), $k);
         }
     }
 

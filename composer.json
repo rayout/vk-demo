@@ -1,7 +1,10 @@
 {
   "name": "rayout/vk-demo",
   "require": {
-    "php": ">=5.6.0"
+    "php": ">=5.6.0",
+    "firebase/php-jwt": "^5.0",
+    "davedevelopment/phpmig": "^1.5",
+    "pimple/pimple": "^3.2"
   },
   "autoload": {
     "psr-4": {

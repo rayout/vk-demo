@@ -18,22 +18,17 @@ class Request {
      */
     public function getAll()
     {
-        $data = array_merge($_GET, $_POST);
-        $result = [];
-        foreach($data as $key=>$value){
-            $result[$key] = $this->cleanData($value);
-        }
         return [
             'get' => $this->cleanData($_GET),
             'post' => $this->cleanData($_POST),
         ];
     }
 
-    public function get($key, $default){
+    public function get($key, $default = false){
         return !empty($this->data['get'][$key]) ? $this->data['get'][$key] : $default;
     }
 
-    public function post($key, $default)
+    public function post($key, $default = false)
     {
         return !empty($this->data['post'][$key]) ? $this->data['post'][$key] : $default;
     }
