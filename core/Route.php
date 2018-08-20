@@ -28,7 +28,8 @@ Class Route {
             // заменяем паттерны в правиле
             $route['url'] = str_replace(array_keys(self::$patterns), array_values(self::$patterns), $route['url']);
 
-            if(preg_match_all('#^'.$route['url'].'$#', $currentUrl, $matches, PREG_SET_ORDER)){
+            if($route['method'] == self::getRequestMethod()
+                && preg_match_all('#^'.$route['url'].'$#', $currentUrl, $matches, PREG_SET_ORDER)){
                 unset($matches[0][0]);
                 return $this->loadRoute($route, $matches[0]);
             }
