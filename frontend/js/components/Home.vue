@@ -9,15 +9,16 @@
 <script>
     import AppNav from './AppNav';
     import Dashboard from './Dashboard';
-    //import { isLoggedIn } from '../../utils/auth';
+    import auth from '../services/auth';
     export default {
         name: 'home',
         components: {
             AppNav,
             Dashboard,
         },
-        data() {
-        },
-        methods: {}
+        methods: {},
+        mounted() {
+            console.log(123, auth.user());
+        }
     };
 </script>

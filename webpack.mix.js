@@ -12,4 +12,5 @@ let mix = require('laravel-mix');
  */
 
 mix.js('frontend/js/app.js', 'public/dist/js')
-    .sass('frontend/style/app.scss', 'public/dist/css');
+    .sass('frontend/style/app.scss', 'public/dist/css')
+    .sourceMaps();;

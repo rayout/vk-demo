@@ -12,9 +12,9 @@ class AuthController {
         $pass = $request->get('pass');
 
         if($jwt = auth()->login($login, $pass)){
-            $response->json(['success' => true, 'jwt' => $jwt]);
+            $response->json(['success' => true, 'jwt' => $jwt, 'user' => ['id' => 1, 'role' => 'customer']]);
         }else{
-            $response->json(['success' => false], 404);
+            $response->json(['success' => false], 403);
         }
     }
 }

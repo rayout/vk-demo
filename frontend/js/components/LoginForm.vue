@@ -1,31 +1,44 @@
 <template>
-
+    <div class="col-sm-4 col-sm-offset-4">
+        <h2>Log In</h2>
+        <p>Log in to your account to get some great quotes.</p>
+        <div class="alert alert-danger" v-if="error">
+            <p>{{ error }}</p>
+        </div>
+        <div class="form-group">
+            <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter your username"
+                    v-model="login"
+            >
+        </div>
+        <div class="form-group">
+            <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Enter your password"
+                    v-model="password"
+            >
+        </div>
+        <button class="btn btn-primary" @click="submit()">Access</button>
+    </div>
 </template>
 
 <script>
-    //import { isLoggedIn, login, logout } from '../../utils/auth';
+    import auth from '../services/auth'
     export default {
-        name: 'app-nav',
         data() {
             return {
-                email: 'joe@example.com',
-                pass: '',
-                error: false
+                login: '',
+                password: '',
+                error: '',
             }
         },
         methods: {
-            handleLogin() {
-              //  login();
-            },
-            handleLogout() {
-              //  logout();
-            },
-            isLoggedIn() {
-               // return isLoggedIn();
-            },
-        },
-        mounted() {
-            console.log('Component mounted.')
+            submit() {
+                auth.login(this.login, this.password, this, '/')
+            }
         }
-    };
+    }
 </script>

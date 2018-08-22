@@ -6,8 +6,8 @@
 //    ]
 //);
 
-route()::get(
-    '/login', 'App\Controllers\AuthController@login'
+route()::post(
+    '/api/login', 'App\Controllers\AuthController@login'
 );
 
 

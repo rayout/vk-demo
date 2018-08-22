@@ -64,7 +64,7 @@ class Response
     {
         $this->setContent('application/json');
         $this->setResponseCode($code);
-        echo json_encode($data);
+        echo json_encode($data, true);
     }
 
 }

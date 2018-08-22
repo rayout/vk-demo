@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        123
     </div>
 </template>
 
@@ -9,9 +9,9 @@
     import OrderList from './OrderList';
     //import { isLoggedIn } from '../../utils/auth';
     export default {
+        name: 'customer-form',
         components: {
-            AppNav,
-            OrderList,
+
         },
         data() {
             return {
