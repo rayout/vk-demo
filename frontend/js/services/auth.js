@@ -27,8 +27,9 @@ export default {
     },
 
     logout() {
-        localStorage.removeItem('token')
-        this.authenticated = false
+        localStorage.removeItem('token');
+        this.authenticated = false;
+        router.push('/');
     },
 
     user() {

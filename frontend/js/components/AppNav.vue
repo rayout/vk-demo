@@ -3,32 +3,48 @@
         <div class="navbar-header">
             <router-link to="/" class="navbar-brand">VK demo</router-link>
         </div>
+        <div class="nav navbar-nav navbar-text" v-if="isLoggedIn">
+            <div class="row">
+                <div class="col-md12">Username: {{user.name}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">Balance: {{user.balance}}</div>
+            </div>
+        </div>
+
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <button class="btn btn-danger log" @click="handleLogout()">Log out </button>
-                <button class="btn btn-info log" @click="handleLogin()">Log In</button>
+                <button v-if="isLoggedIn" class="btn btn-danger log" @click="handleLogout()">Log out </button>
+                <button v-else class="btn btn-info log" @click="handleLogin()">Log In</button>
             </li>
         </ul>
+
+
     </nav>
 </template>
 
 <script>
-    //import { isLoggedIn, login, logout } from '../../utils/auth';
+    import auth from '../services/auth';
+    import router from '../router'
     export default {
         name: 'app-nav',
+        data() {
+            return {
+                isLoggedIn: auth.checkAuth(),
+                user: auth.user()
+            }
+        },
         methods: {
             handleLogin() {
-              //  login();
+                router.push('/login');
             },
             handleLogout() {
-              //  logout();
-            },
-            isLoggedIn() {
-               // return isLoggedIn();
-            },
+                auth.logout();
+                this.isLoggedIn = false;
+            }
         },
         mounted() {
-            console.log('Component mounted.')
+
         }
     };
 </script>
