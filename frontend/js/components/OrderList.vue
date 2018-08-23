@@ -1,19 +1,33 @@
 <template>
     <div class="container">
-        <h3 class="text-center">Order list</h3>
+        <div class="text-center form-center" v-if="isCustomer()">
+            <div class="form-order">
+                <h1 class="h3 mb-3 font-weight-normal">Добавить новый заказ</h1>
+                <label for="inputTitle" class="sr-only">Описание</label>
+                <input v-model="order.title" type="text" id="inputTitle" class="form-control" placeholder="Описание" required="" autofocus="">
+                <label for="inputPrice" class="sr-only">Цена</label>
+                <input v-model="order.price" type="text" id="inputPrice" class="form-control" placeholder="Цена" required="">
+                <button @click="addOrder()" class="btn btn-lg btn-primary btn-block" type="submit">Добавить</button>
+                <div class="alert alert-danger" v-if="error">
+                    <p>{{ error }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-center">Список заказов</h3>
         <hr/>
         <div class="card-columns">
-            <div class="card" v-for="order in orderList">
+            <div class="card" v-for="(order, key) in orderList">
                 <div class="card-body">
-                    <h5 class="card-title">{{ order.name }}</h5>
+                    <h5 class="card-title">{{ order.title }}</h5>
                     <p class="card-text">{{ order.descr }}</p>
                     <span class="d-block">User: {{ order.username }}</span>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Price: {{ order.price }}</li>
                 </ul>
-                <div class="card-body text-right">
-                    <a href="#" class="card-link">Выполнить</a>
+                <div class="card-body text-right" v-if="!isExecutor()">
+                    <a @click="execute(key)" href="#" class="card-link">Выполнить</a>
                 </div>
             </div>
         </div>
@@ -26,7 +40,7 @@
 <script>
     import AppNav from './AppNav';
     import OrderList from './OrderList';
-    //import { isLoggedIn } from '../../utils/auth';
+    import auth from '../services/auth';
     export default {
         components: {
             AppNav,
@@ -34,30 +48,112 @@
         },
         data() {
             return {
+                order: {
+                    title: '',
+                    price: '',
+                },
                 orderList: [
-                    {name: 'lol11', price: 30, username: 'ray'},
-                    {name: 'lol2', price: 30, username: 'ray'},
-                    {name: 'lol3', price: 30, username: 'ray'},
-                    {name: 'lol4', price: 30, username: 'ray'},
-                    {name: 'lol5', price: 30, username: 'ray'},
-                    {name: 'lol6', price: 30, username: 'ray'},
-                    {name: 'lol7', price: 30, username: 'ray'},
-                    {name: 'lol8', price: 30, username: 'ray'},
-                    {name: 'lol8', price: 30, username: 'ray'},
-                ]
+                    {title: 'lol11', price: 30, username: 'ray'},
+                    {title: 'lol2', price: 30, username: 'ray'},
+                    {title: 'lol3', price: 30, username: 'ray'},
+                    {title: 'lol4', price: 30, username: 'ray'},
+                    {title: 'lol5', price: 30, username: 'ray'},
+                    {title: 'lol6', price: 30, username: 'ray'},
+                    {title: 'lol7', price: 30, username: 'ray'},
+                    {title: 'lol8', price: 30, username: 'ray'},
+                    {title: 'lol8', price: 30, username: 'ray'},
+                ],
+                isLoggedIn: auth.checkAuth(),
+                user: auth.user(),
+                error: ''
             };
         },
         methods: {
-            isLoggedIn() {
-                // return isLoggedIn();
+            addOrder() {
+                this.error = '';
+
+                if(this.order.price >>> 0 !== parseFloat(this.order.price)){
+                    this.error = 'Цена может быть только числом';
+                    return false;
+                }
+
+                if(this.order.title === '' || this.order.price === ''){
+                    this.error = 'Все поля обязательны к заполнению';
+                    return false;
+                }
+
+                if(this.order.price > auth.user().balance){
+                    this.error = 'Не достаточно средств для размещения заказа';
+                    return false;
+                }
+
+                this.orderList.unshift(Vue.util.extend({}, this.order));
+                auth.setBalance(parseFloat(auth.user().balance) - parseFloat(this.order.price)); //get from server actual balance
+
+                this.order.title = '';
+                this.order.price = '';
+
             },
+            isCustomer() {
+                return auth.checkAuth() && auth.user().role === 'customer'
+            },
+            isExecutor() {
+                return auth.checkAuth() && auth.user().role === 'executor'
+            },
+            execute(index) {
+                this.orderList.splice(index, 1)
+            }
+        },
+        mounted() {
+            if (auth.checkAuth()) {
+                this.order.username = auth.user().name;
+            }
         }
     };
 </script>
 <style scoped>
 
-.col {
-    margin-bottom: 15px;
-    border: 1px solid rgba(86,61,124,.2);
-}
+    .form-order {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+    .form-center {
+        display: -ms-flexbox;
+        display: -webkit-box;
+        display: flex;
+        -ms-flex-align: center;
+        -ms-flex-pack: center;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .form-order .form-control {
+        position: relative;
+        box-sizing: border-box;
+        height: auto;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .form-order input[type="text"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .form-order input[type="number"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .form-order .form-control:focus {
+        z-index: 2;
+    }
+    .alert {
+        margin-top: 15px;
+    }
 </style>

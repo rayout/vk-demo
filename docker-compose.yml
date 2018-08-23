@@ -6,7 +6,7 @@ services:
     image: tain/nginx-phpfpm
     volumes:
     - ./nginx.conf:/site.conf
-    - .:/var/www
+    - .:/var/www:consistent
     expose:
     - "80"
     labels:

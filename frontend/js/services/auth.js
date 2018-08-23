@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const LOGIN_URL = 'http://' + process.env.MIX_HOST +'/api/login';
 
-
 export default {
 
     authenticated: false,
@@ -29,12 +28,19 @@ export default {
 
     logout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         this.authenticated = false;
         router.push('/');
     },
 
     user() {
         return JSON.parse(localStorage.getItem('user'));
+    },
+
+    setBalance(balance) {
+        let user = this.user();
+        user.balance = balance;
+        localStorage.setItem('user', JSON.stringify(user));
     },
 
     checkAuth() {
