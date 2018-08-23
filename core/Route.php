@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use App\middleware\CORSMiddleware;
+
 Class Route {
     public static $routes = [];
 
@@ -14,6 +16,10 @@ Class Route {
         '{any}'     => '([^/]+)',
     ];
 
+    protected $globalMiiddleware = [
+         CORSMiddleware::class
+    ];
+
     /**
      * Запуск роутинга
      *
@@ -24,6 +30,8 @@ Class Route {
     {
         $currentUrl = self::getCurrentUrl();
 
+        $next = $this->runMiddlewaries($this->globalMiiddleware);
+
         foreach(self::$routes as $key=>$route){
             // заменяем паттерны в правиле
             $route['url'] = str_replace(array_keys(self::$patterns), array_values(self::$patterns), $route['url']);
@@ -31,7 +39,7 @@ Class Route {
             if($route['method'] == self::getRequestMethod()
                 && preg_match_all('#^'.$route['url'].'$#', $currentUrl, $matches, PREG_SET_ORDER)){
                 unset($matches[0][0]);
-                return $this->loadRoute($route, $matches[0]);
+                return $this->loadRoute($route, $matches[0], $next);
             }
         }
 
@@ -64,7 +72,7 @@ Class Route {
      * @return mixed
      * @throws \Exception
      */
-    private function loadRoute($route, $params)
+    private function loadRoute($route, $params, $next)
     {
         if ($route['call'] instanceof \Closure) {
             return call_user_func($route['call']);
@@ -75,13 +83,7 @@ Class Route {
             throw new \Exception($class . ' not found when load route ' . $route['url']);
         }
 
-        $next = [new Request(), new Response()];
-        if(!empty($route['middleware'])){
-            foreach($route['middleware'] as $middleware) {
-                $middleware = new $middleware(...$next);
-                $next = $middleware->run();
-            }
-        }
+       $next = $this->runMiddlewaries($route['middleware'], $next);
 
         call_user_func_array([new $class, $method], array_values(array_merge($next, $params)));
     }
@@ -141,6 +143,25 @@ Class Route {
               ? (is_array($arguments[2]) ? $arguments[2] : [$arguments[2]])
               : [],
         ];
+    }
+
+    /**
+     * @author Alex <alex_sh@kodeks.ru>
+     * @param $middlewaries
+     * @param bool $next
+     * @return mixed
+     */
+    private function runMiddlewaries($middlewaries = [], $next = false)
+    {
+        if(!$next) {
+            $next = [new Request(), new Response()];
+        }
+        foreach($middlewaries as $middleware) {
+
+            $middleware = new $middleware(...$next);
+            $next = $middleware->run();
+        }
+        return $next;
     }
 
 }

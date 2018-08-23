@@ -7,8 +7,16 @@
 //);
 
 route()::post(
-    '/api/login', 'App\Controllers\AuthController@login'
+    '/api/login', 'App\controllers\AuthController@login'
 );
+
+route()::get(
+    '/api/.*', 'App\controllers\MainController@notFound'
+);
+route()::post(
+    '/api/.*', 'App\controllers\MainController@notFound'
+);
+
 
 
 route()::get('.*', function() {

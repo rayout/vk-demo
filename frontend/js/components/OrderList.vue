@@ -2,24 +2,23 @@
     <div class="container">
         <h3 class="text-center">Order list</h3>
         <hr/>
-
-        <div class="row">
-            <div class="col col-md-12" v-for="order in orderList">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"> {{ order.name }} </h3>
-                    </div>
-                    <div class="panel-body row align-items-center">
-                        <div class=" col-sm-10">
-                            <p><span class="badge alert-info"> price: </span> {{ order.username }} </p>
-                            <p><span class="badge alert-danger"> from: </span><strong> {{ order.price }} </strong></p>
-                        </div>
-                        <div class=" col-sm-2">
-                            <button  class="btn btn-info log" @click="handleLogin()">Log In</button>
-                        </div>
-                    </div>
+        <div class="card-columns">
+            <div class="card" v-for="order in orderList">
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.name }}</h5>
+                    <p class="card-text">{{ order.descr }}</p>
+                    <span class="d-block">User: {{ order.username }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Price: {{ order.price }}</li>
+                </ul>
+                <div class="card-body text-right">
+                    <a href="#" class="card-link">Выполнить</a>
                 </div>
             </div>
+        </div>
+        <div class="d-block text-right mt-3">
+            <button  class="btn btn-info log">Next 20</button>
         </div>
     </div>
 </template>
@@ -36,7 +35,7 @@
         data() {
             return {
                 orderList: [
-                    {name: 'lol', price: 30, username: 'ray'},
+                    {name: 'lol11', price: 30, username: 'ray'},
                     {name: 'lol2', price: 30, username: 'ray'},
                     {name: 'lol3', price: 30, username: 'ray'},
                     {name: 'lol4', price: 30, username: 'ray'},
@@ -44,10 +43,7 @@
                     {name: 'lol6', price: 30, username: 'ray'},
                     {name: 'lol7', price: 30, username: 'ray'},
                     {name: 'lol8', price: 30, username: 'ray'},
-                    {name: 'lol2', price: 30, username: 'ray'},
-                    {name: 'lol2', price: 30, username: 'ray'},
-                    {name: 'lol2', price: 30, username: 'ray'},
-                    {name: 'lol2', price: 30, username: 'ray'},
+                    {name: 'lol8', price: 30, username: 'ray'},
                 ]
             };
         },

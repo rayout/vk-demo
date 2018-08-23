@@ -10,7 +10,14 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
+mix.webpackConfig({
+    devtool: 'source-map'
+})
 mix.js('frontend/js/app.js', 'public/dist/js')
     .sass('frontend/style/app.scss', 'public/dist/css')
-    .sourceMaps();;
+    .sourceMaps()
+    .browserSync({
+        proxy: 'vk-demo.localhost',
+        files: ['public/dist/**/*']
+    });
+    //

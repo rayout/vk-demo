@@ -12,17 +12,18 @@ export default {
             login: login,
             pass: password
         })
-            .then((response) => {
-                localStorage.setItem('token', response.data.jwt);
-                localStorage.setItem('user', JSON.stringify(response.data.user));
+        .then((response) => {
+            console.log(response);
+            localStorage.setItem('token', response.data.jwt);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
 
-                this.authenticated = true;
+            this.authenticated = true;
 
-                if(redirect) {
-                    router.push(redirect);
-                }
-            }).catch((err) => {
-            context.error = err.response.data
+            if(redirect) {
+                router.push(redirect);
+            }
+        }).catch((err) => {
+             context.error = err.response.data
         })
     },
 
