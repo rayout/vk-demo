@@ -11,8 +11,8 @@ class InsertDemoUsers extends Migration
     {
         $password = password_hash(123, PASSWORD_DEFAULT);
         $sql = /** @lang MySQL */
-            "INSERT INTO users (email, password) VALUES ('user1@test.ru', '$password');
-INSERT INTO users (email, password) VALUES ('user2@test.ru', '$password');";
+            "INSERT INTO users (email, password, balance) VALUES ('user1@test.ru', '$password', 1000);
+INSERT INTO users (email, password, balance) VALUES ('user2@test.ru', '$password', 1000);";
         $container = $this->getContainer();
         $container['db']->query($sql);
     }

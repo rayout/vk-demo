@@ -11,6 +11,10 @@ route()::post(
 );
 
 route()::get(
+    '/test', 'App\controllers\MainController@index'
+);
+
+route()::get(
     '/api/.*', 'App\controllers\MainController@notFound'
 );
 route()::post(

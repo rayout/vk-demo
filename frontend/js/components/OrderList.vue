@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ order.title }}</h5>
                     <p class="card-text">{{ order.descr }}</p>
-                    <span class="d-block">User: {{ order.username }}</span>
+                    <span class="d-block">User: {{ order.email }}</span>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Price: {{ order.price }}</li>
@@ -53,15 +53,15 @@
                     price: '',
                 },
                 orderList: [
-                    {title: 'lol11', price: 30, username: 'ray'},
-                    {title: 'lol2', price: 30, username: 'ray'},
-                    {title: 'lol3', price: 30, username: 'ray'},
-                    {title: 'lol4', price: 30, username: 'ray'},
-                    {title: 'lol5', price: 30, username: 'ray'},
-                    {title: 'lol6', price: 30, username: 'ray'},
-                    {title: 'lol7', price: 30, username: 'ray'},
-                    {title: 'lol8', price: 30, username: 'ray'},
-                    {title: 'lol8', price: 30, username: 'ray'},
+                    {title: 'lol11', price: 30, email: 'ray'},
+                    {title: 'lol2', price: 30, email: 'ray'},
+                    {title: 'lol3', price: 30, email: 'ray'},
+                    {title: 'lol4', price: 30, email: 'ray'},
+                    {title: 'lol5', price: 30, email: 'ray'},
+                    {title: 'lol6', price: 30, email: 'ray'},
+                    {title: 'lol7', price: 30, email: 'ray'},
+                    {title: 'lol8', price: 30, email: 'ray'},
+                    {title: 'lol8', price: 30, email: 'ray'},
                 ],
                 isLoggedIn: auth.checkAuth(),
                 user: auth.user(),
@@ -106,7 +106,7 @@
         },
         mounted() {
             if (auth.checkAuth()) {
-                this.order.username = auth.user().name;
+                this.order.email = auth.user().email;
             }
         }
     };

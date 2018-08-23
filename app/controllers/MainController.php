@@ -9,6 +9,7 @@ class MainController {
 
     public function index(Request $request, Response $response){
         echo 'it is works!';
+        dd(db()->run('select * from users'));
     }
 
     public function notFound(Request $request, Response $response){

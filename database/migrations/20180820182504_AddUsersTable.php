@@ -15,7 +15,8 @@ CREATE TABLE users
 (
     id int PRIMARY KEY auto_increment,
     email varchar(128) NOT NULL,
-    password varchar(128) NOT NULL
+    password varchar(128) NOT NULL,
+    balance int default 0
 );
 CREATE UNIQUE INDEX users_email_uindex ON users (email);
 SQL;

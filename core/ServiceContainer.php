@@ -41,6 +41,13 @@ class ServiceContainer
         return $this;
     }
 
+    public function setObject($key, $object)
+    {
+        $this->bindings[$key]['object'] = $object;
+
+        return $this;
+    }
+
     /**
      * @param $key
      *
