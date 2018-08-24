@@ -5,7 +5,8 @@
     "firebase/php-jwt": "^5.0",
     "davedevelopment/phpmig": "^1.5",
     "pimple/pimple": "^3.2",
-    "paragonie/easydb": "^2"
+    "paragonie/easydb": "^2",
+    "fzaninotto/faker": "^1.8"
   },
   "autoload": {
     "psr-4": {

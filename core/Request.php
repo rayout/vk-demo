@@ -32,7 +32,7 @@ class Request {
     }
 
     public function get($key, $default = false){
-        return !empty($this->data[$key]) ? $this->data[$key] : $default;
+        return isset($this->data[$key]) ? $this->data[$key] : $default;
     }
 
     /**

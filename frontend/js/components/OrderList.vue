@@ -21,18 +21,18 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ order.title }}</h5>
                     <p class="card-text">{{ order.descr }}</p>
-                    <span class="d-block">User: {{ order.email }}</span>
+                    <span class="d-block">User: {{ order.customer_user_id }}</span>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Price: {{ order.price }}</li>
                 </ul>
-                <div class="card-body text-right" v-if="!isExecutor()">
+                <div class="card-body text-right" v-if="isExecutor()">
                     <a @click="execute(key)" href="#" class="card-link">Выполнить</a>
                 </div>
             </div>
         </div>
         <div class="d-block text-right mt-3">
-            <button  class="btn btn-info log">Next 20</button>
+            <button @click="next()" class="btn btn-info log">Next 20</button>
         </div>
     </div>
 </template>
@@ -41,6 +41,7 @@
     import AppNav from './AppNav';
     import OrderList from './OrderList';
     import auth from '../services/auth';
+    import orderService from '../services/orders';
     export default {
         components: {
             AppNav,
@@ -52,16 +53,8 @@
                     title: '',
                     price: '',
                 },
+                last_id: 0,
                 orderList: [
-                    {title: 'lol11', price: 30, email: 'ray'},
-                    {title: 'lol2', price: 30, email: 'ray'},
-                    {title: 'lol3', price: 30, email: 'ray'},
-                    {title: 'lol4', price: 30, email: 'ray'},
-                    {title: 'lol5', price: 30, email: 'ray'},
-                    {title: 'lol6', price: 30, email: 'ray'},
-                    {title: 'lol7', price: 30, email: 'ray'},
-                    {title: 'lol8', price: 30, email: 'ray'},
-                    {title: 'lol8', price: 30, email: 'ray'},
                 ],
                 isLoggedIn: auth.checkAuth(),
                 user: auth.user(),
@@ -102,12 +95,21 @@
             },
             execute(index) {
                 this.orderList.splice(index, 1)
+            },
+            next(last_id) {
+                last_id = last_id || this.last_id;
+                orderService.list(this.last_id).then((res)=>{
+                    this.orderList = res.data.orders;
+                    this.last_id = this.orderList.slice(-1)[0].id;
+                })
             }
         },
         mounted() {
             if (auth.checkAuth()) {
                 this.order.email = auth.user().email;
             }
+            this.next();
+
         }
     };
 </script>

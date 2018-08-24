@@ -11,6 +11,10 @@ route()::post(
 );
 
 route()::get(
+    '/api/orders/list', 'App\controllers\OrdersController@get'
+);
+
+route()::get(
     '/test', 'App\controllers\MainController@index'
 );
 
