@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * @author Alex <alex_sh@kodeks.ru>
+ * @return  \Core\ServiceContainer
+ */
 function app()
 {
+
     return \Core\ServiceContainer::getInstance();
 }
 
@@ -26,8 +31,7 @@ function route()
 }
 
 /**
- * @return \Core\Auth
- * @throws Exception
+ * @return \Core\Auth|bool
  */
 function auth()
 {
@@ -35,26 +39,32 @@ function auth()
 }
 
 /**
- * @return \ParagonIE\EasyDB\EasyDB
- * @throws Exception
+ * @return \ParagonIE\EasyDB\EasyDB|bool
  */
-function db()
+function db($connection = 'db1')
 {
-    $host = config()->get('database.host');
-    $port = config()->get('database.port');
-    $user = config()->get('database.user');
-    $pass = config()->get('database.pass');
-    $database = config()->get('database.database');
 
-    $db = \ParagonIE\EasyDB\Factory::create(
-        "mysql:host=$host;port=$port;dbname=$database",
-        $user,
-        $pass
-    );
 
-    return app()
-        ->setObject('db', $db)
-        ->singleton('db');
+    if($db = app()->singleton('db' . $connection)){
+        return $db;
+    }else {
+
+        $host = config()->get("database.{$connection}.host");
+        $port = config()->get("database.{$connection}.port");
+        $user = config()->get("database.{$connection}.user");
+        $pass = config()->get("database.{$connection}.pass");
+        $database = config()->get("database.{$connection}.database");
+
+        $db = \ParagonIE\EasyDB\Factory::create(
+            "mysql:host=$host;port=$port;dbname=$database",
+            $user,
+            $pass
+        );
+
+        return app()
+            ->setObject('db' . $connection, $db)
+            ->singleton('db' . $connection);
+    }
 }
 
 function dd()

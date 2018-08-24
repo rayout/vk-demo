@@ -5,7 +5,7 @@
         </div>
         <div class="nav navbar-nav navbar-text" v-if="isLoggedIn">
             <div class="row">
-                <div class="col-md12">Username: {{user.name}}</div>
+                <div class="col-md12">Username: {{user.email}}</div>
             </div>
             <div class="row">
                 <div class="col-md-12">Balance: {{user.balance}}</div>

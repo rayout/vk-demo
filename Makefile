@@ -1,4 +1,4 @@
 migrate:
 	php ./database/up.php
-down:
+migrate-down:
 	php ./database/down.php

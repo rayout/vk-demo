@@ -4,29 +4,14 @@ namespace Core;
 
 class ServiceContainer
 {
+    use SingletonTrait;
+
     /**
      * @var array
      *
      * все классы
      */
     protected $bindings = [];
-
-    /**
-     * @var ServiceContainer
-     */
-    private static $instance;
-
-    /**
-     * @return ServiceContainer
-     */
-    public static function getInstance()
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
-        }
-
-        return static::$instance;
-    }
 
     /**
      * @param $key
@@ -68,7 +53,7 @@ class ServiceContainer
     public function singleton($key, $params = null)
     {
         if (!array_key_exists($key, $this->bindings)) {
-            throw new \Exception("`Class $key not found`...");
+            return false;
         }
 
         if(empty($this->bindings[$key]['object'])){

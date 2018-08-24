@@ -4,6 +4,9 @@ use Phpmig\Migration\Migration;
 
 class AddUsersTable extends Migration
 {
+
+    public $connection = 'db1';
+
     /**
      * Do the migration
      */
@@ -21,7 +24,7 @@ CREATE TABLE users
 CREATE UNIQUE INDEX users_email_uindex ON users (email);
 SQL;
         $container = $this->getContainer();
-        $container['db']->query($sql);
+        $container[$this->connection]->query($sql);
     }
 
     /**
@@ -31,6 +34,6 @@ SQL;
     {
         $sql = "drop table users;";
         $container = $this->getContainer();
-        $container['db']->query($sql);
+        $container[$this->connection]->query($sql);
     }
 }

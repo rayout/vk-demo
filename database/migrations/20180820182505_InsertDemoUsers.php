@@ -4,6 +4,9 @@ use Phpmig\Migration\Migration;
 
 class InsertDemoUsers extends Migration
 {
+
+    public $connection = 'db1';
+
     /**
      * Do the migration
      */
@@ -14,7 +17,7 @@ class InsertDemoUsers extends Migration
             "INSERT INTO users (email, password, balance) VALUES ('user1@test.ru', '$password', 1000);
 INSERT INTO users (email, password, balance) VALUES ('user2@test.ru', '$password', 1000);";
         $container = $this->getContainer();
-        $container['db']->query($sql);
+        $container[$this->connection]->query($sql);
     }
 
     /**
@@ -24,6 +27,6 @@ INSERT INTO users (email, password, balance) VALUES ('user2@test.ru', '$password
     {
         $sql = "delete from users where email = 'user1@test.ru'; delete from users where email = 'user2@test.ru';";
         $container = $this->getContainer();
-        $container['db']->query($sql);
+        $container[$this->connection]->query($sql);
     }
 }

@@ -4,6 +4,7 @@ namespace App\controllers;
 
 use Core\Request;
 use Core\Response;
+use App\models\UserModel;
 
 class AuthController {
 
@@ -11,10 +12,11 @@ class AuthController {
         $login = $request->get('login');
         $pass = $request->get('pass');
 
-        if($jwt = auth()->login($login, $pass)){
-            $response->json(['success' => true, 'jwt' => $jwt, 'user' => [
-                'id' => 1, 'role' => 'customer', 'name' => 'user', 'balance' => 30]
-            ]);
+        $user = UserModel::getInstance()->attempt($login, $pass);
+
+        if($user){
+            $jwt = auth()->encodeJwt($user);
+            $response->json(['success' => true, 'jwt' => $jwt, 'user' => $user]);
         }else{
             $response->json(['success' => false], 403);
         }

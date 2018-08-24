@@ -18,19 +18,21 @@ class Request {
      */
     public function getAll()
     {
-        return [
-            'get' => $this->cleanData($_GET),
-            'post' => $this->cleanData($_POST),
-        ];
+        $payload = json_decode(file_get_contents('php://input'), true);
+
+        if(empty($payload)) {
+            $payload = [];
+        }
+
+        return array_merge(
+            $this->cleanData($_GET),
+            $this->cleanData($_POST),
+            $this->cleanData($payload)
+        );
     }
 
     public function get($key, $default = false){
-        return !empty($this->data['get'][$key]) ? $this->data['get'][$key] : $default;
-    }
-
-    public function post($key, $default = false)
-    {
-        return !empty($this->data['post'][$key]) ? $this->data['post'][$key] : $default;
+        return !empty($this->data[$key]) ? $this->data[$key] : $default;
     }
 
     /**

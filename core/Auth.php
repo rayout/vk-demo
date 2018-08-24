@@ -17,13 +17,11 @@ class Auth
         JWT::$leeway = 60;
     }
 
-    public function login($login, $pass)
+    public function encodeJwt($user)
     {
         $key = config()->get('jwt.key');
         $payload = [
-            'user' => [
-                'id' => 1
-            ],
+            'user' => $user,
             "iat" => time(),
             'nbf' => time() + 10,
             'exp' => strtotime('+1 hour')
@@ -32,7 +30,7 @@ class Auth
          return JWT::encode($payload, $key);
     }
 
-    public function loginByJWT($jwt)
+    public function decodeJWT($jwt)
     {
         $key = config()->get('jwt.key');
         $data = JWT::decode($jwt, $key, array('HS256'));
