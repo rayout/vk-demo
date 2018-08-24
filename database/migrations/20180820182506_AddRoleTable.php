@@ -2,10 +2,9 @@
 
 use Phpmig\Migration\Migration;
 
-class AddUsersTable extends Migration
+class AddRoleTable extends Migration
 {
-
-    public $connection = 'db1';
+    public $connection = 'db2';
 
     /**
      * Do the migration
@@ -14,15 +13,13 @@ class AddUsersTable extends Migration
     {
         $sql = /** @lang MySQL */
             <<<SQL
-CREATE TABLE users
+CREATE TABLE role
 (
-    id int PRIMARY KEY auto_increment,
-    email varchar(128) NOT NULL,
-    password varchar(128) NOT NULL,
-    balance int default 0,
-    role int
+    id int PRIMARY KEY,
+    name varchar(128) NOT NULL
 );
-CREATE UNIQUE INDEX users_email_uindex ON users (email);
+INSERT INTO role (id, name) VALUES (1, 'customer');
+INSERT INTO role (id, name) VALUES (2, 'executor');
 SQL;
         $container = $this->getContainer();
         $container[$this->connection]->query($sql);
@@ -33,7 +30,7 @@ SQL;
      */
     public function down()
     {
-        $sql = "drop table users;";
+        $sql = "drop table role;";
         $container = $this->getContainer();
         $container[$this->connection]->query($sql);
     }

@@ -2,7 +2,6 @@
 namespace Core;
 
 trait SingletonTrait{
-    protected static $instance;
 
     /**
      * @author Alex <alex_sh@kodeks.ru>
@@ -10,10 +9,10 @@ trait SingletonTrait{
      */
     public static function getInstance()
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
+        static $instance = null;
+        if ($instance === null) {
+            $instance = new static();
         }
-
-        return static::$instance;
+        return $instance;
     }
 }

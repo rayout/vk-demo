@@ -13,9 +13,18 @@ class UserModel extends Model
         $user = $this->db->row("select * from {$this->table} where email = ?",$email);
         if(password_verify($password,$user['password'])){
             unset($user['password']);
-            return $user;
+            return $this->addRole($user);
         }
         return false;
+    }
+
+    public function addRole($user)
+    {
+        $role_id = $user['role'];
+        if($role_id > 0 ){
+            $user['role'] = RoleModel::getInstance()->getById($role_id);
+        }
+        return $user;
     }
 
     public static function hashPassword($password)
