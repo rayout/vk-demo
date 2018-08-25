@@ -31,7 +31,7 @@
         data() {
             return {
                 isLoggedIn: auth.checkAuth(),
-                user: auth.user()
+                user: auth.getUser()
             }
         },
         methods: {
@@ -44,7 +44,7 @@
             }
         },
         mounted() {
-
+            this.$root.$on('user', (data)=>{ this.user = data});
         }
     };
 </script>

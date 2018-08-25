@@ -14,8 +14,8 @@ route()::get(
     '/api/orders/list', 'App\controllers\OrdersController@get'
 );
 
-route()::get(
-    '/test', 'App\controllers\MainController@index'
+route()::post(
+    '/api/order/add', 'App\controllers\OrdersController@add', [\App\middleware\AuthMiddleware::class]
 );
 
 route()::get(
@@ -25,6 +25,13 @@ route()::post(
     '/api/.*', 'App\controllers\MainController@notFound'
 );
 
+
+route()::get(
+    '/test1', 'App\controllers\MainController@test1'
+);
+route()::get(
+    '/test2', 'App\controllers\MainController@test2'
+);
 
 
 route()::get('.*', function() {

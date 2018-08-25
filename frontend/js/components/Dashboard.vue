@@ -13,7 +13,6 @@
     export default {
         name: 'dashboard',
         components: {
-            AppNav,
             OrderList,
             CustomerForm,
         },

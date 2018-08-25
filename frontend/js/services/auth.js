@@ -1,11 +1,13 @@
 import router from '../router';
 import axios from 'axios';
+import Vue from 'vue';
 
 const LOGIN_URL = 'http://' + process.env.MIX_HOST +'/api/login';
 
 export default {
 
     authenticated: false,
+    user: {},
     login(login, password, context, redirect) {
         axios.post(LOGIN_URL, {
             login: login,
@@ -30,21 +32,24 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         this.authenticated = false;
+        this.user = false;
         router.push('/');
     },
 
-    user() {
-        return JSON.parse(localStorage.getItem('user'));
+    getUser() {
+        this.user = Object.assign({}, this.user, JSON.parse(localStorage.getItem('user')));
+       // console.log(this.user);
+        return this.user;
     },
 
     setBalance(balance) {
-        let user = this.user();
-        user.balance = balance;
-        localStorage.setItem('user', JSON.stringify(user));
+        Vue.set(this.user, 'balance', balance);
+        localStorage.setItem('user', JSON.stringify(this.user));
+       // console.log(this.user);
     },
 
     checkAuth() {
-        let jwt = localStorage.getItem('token')
+        let jwt = localStorage.getItem('token');
         this.authenticated = !!jwt;
         return this.authenticated;
     },
@@ -53,5 +58,8 @@ export default {
         return {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
+    },
+    getToken() {
+            localStorage.getItem('token')
     }
 }

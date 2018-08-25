@@ -7,7 +7,7 @@ use \Firebase\JWT\JWT;
 class Auth
 {
 
-    private static $user = false;
+    private $user = false;
 
     /**
      * Auth constructor.
@@ -33,8 +33,11 @@ class Auth
     public function decodeJWT($jwt)
     {
         $key = config()->get('jwt.key');
-        $data = JWT::decode($jwt, $key, array('HS256'));
-        \dd(123, $data);
+        return JWT::decode($jwt, $key, array('HS256'));
+    }
+
+    public function setUser($user){
+        $this->user = $user;
     }
 
     /**
@@ -43,6 +46,11 @@ class Auth
      */
     public function user()
     {
-        return self::$user;
+        return $this->user;
+    }
+
+    public function exists()
+    {
+        return !empty($this->user);
     }
 }

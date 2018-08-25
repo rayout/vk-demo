@@ -35,6 +35,16 @@ abstract class Model
         return $this->db->run($statement, ...$params);
     }
 
+    public function single($statement, $params = [])
+    {
+        return $this->db->single($statement, $params);
+    }
+
+    public function insert($data)
+    {
+        return $this->db->insertGet($this->table, $data, 'id');
+    }
+
     public function getColumn($data, $column_name)
     {
         $result = [];
@@ -67,5 +77,15 @@ abstract class Model
         }, $data);
 
         return $data;
+    }
+
+    public function beginTransaction()
+    {
+        $this->db->beginTransaction();
+    }
+
+    public function commit()
+    {
+        $this->db->commit();
     }
 }

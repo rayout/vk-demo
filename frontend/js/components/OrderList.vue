@@ -57,7 +57,7 @@
                 orderList: [
                 ],
                 isLoggedIn: auth.checkAuth(),
-                user: auth.user(),
+                user: auth.getUser(),
                 error: ''
             };
         },
@@ -75,26 +75,32 @@
                     return false;
                 }
 
-                if(this.order.price > auth.user().balance){
+                if(this.order.price > auth.getUser().balance){
                     this.error = 'Не достаточно средств для размещения заказа';
                     return false;
                 }
-
-                this.orderList.unshift(Vue.util.extend({}, this.order));
-                auth.setBalance(parseFloat(auth.user().balance) - parseFloat(this.order.price)); //get from server actual balance
-
-                this.order.title = '';
-                this.order.price = '';
+                orderService.add(this.order.title, this.order.price).then((res)=>{
+                    this.orderList.unshift(Vue.util.extend({}, this.order));
+                    auth.setBalance(parseFloat(res.data.balance)); //get from server actual balance
+                    this.$root.$emit('user', auth.getUser()); // знаю что хрень =/
+                    this.order.title = '';
+                    this.order.price = '';
+                });
 
             },
             isCustomer() {
-                return auth.checkAuth() && auth.user().role === 'customer'
+                return auth.checkAuth() && auth.getUser().role === 'customer'
             },
             isExecutor() {
-                return auth.checkAuth() && auth.user().role === 'executor'
+                return auth.checkAuth() && auth.getUser().role === 'executor'
             },
             execute(index) {
-                this.orderList.splice(index, 1)
+                orderService.execute(index).then((res)=>{
+                    auth.setBalance(parseFloat(res.data.balance)); //get from server actual balance
+                    this.$root.$emit('user', auth.getUser()); // знаю что хрень =/
+                    this.orderList.splice(index, 1)
+                });
+
             },
             next(last_id) {
                 last_id = last_id || this.last_id;
@@ -106,7 +112,7 @@
         },
         mounted() {
             if (auth.checkAuth()) {
-                this.order.email = auth.user().email;
+                this.order.email = auth.getUser().email;
             }
             this.next();
 

@@ -1,11 +1,11 @@
 <?php
 
+use App\models\OrderModel;
 use Phpmig\Migration\Migration;
 
-class AddUsersTable extends Migration
+class AddTransactionTable extends Migration
 {
-
-    public $connection = 'db1';
+    public $connection = 'db3';
 
     /**
      * Do the migration
@@ -14,16 +14,17 @@ class AddUsersTable extends Migration
     {
         $sql = /** @lang MySQL */
             <<<SQL
-CREATE TABLE users
+CREATE TABLE transactions
 (
     id int PRIMARY KEY auto_increment,
-    email varchar(128) NOT NULL,
-    password varchar(128) NOT NULL,
-    balance int default 0,
-    balance_updated_at timestamp,
-    role int
+    user_id int NOT NULL,
+    amount int not null,
+    balance_from int not null,
+    balance_to int not null,
+    completed bool default false,
+    created_at timestamp default CURRENT_TIMESTAMP,
+    updated_at timestamp
 );
-CREATE UNIQUE INDEX users_email_uindex ON users (email);
 SQL;
         $container = $this->getContainer();
         $container[$this->connection]->query($sql);
@@ -34,7 +35,7 @@ SQL;
      */
     public function down()
     {
-        $sql = "drop table users;";
+        $sql = "drop table transactions;";
         $container = $this->getContainer();
         $container[$this->connection]->query($sql);
     }

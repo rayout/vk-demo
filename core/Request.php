@@ -31,6 +31,21 @@ class Request {
         );
     }
 
+    /**
+     * Возвращает токен авторизации
+     * @return mixed
+     */
+    public function getAuth(){
+        $token = false;
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $header = trim($_SERVER["HTTP_AUTHORIZATION"]);
+            if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
+                $token = $matches[1];
+            }
+        }
+        return $token;
+    }
+
     public function get($key, $default = false){
         return isset($this->data[$key]) ? $this->data[$key] : $default;
     }

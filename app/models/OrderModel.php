@@ -26,8 +26,8 @@ class OrderModel extends Model
         return $orders;
     }
 
-    public function insert($data)
+    public function addOrder($order)
     {
-        $this->db->insert($this->table, $data);
+        return $this->insert($order);
     }
 }

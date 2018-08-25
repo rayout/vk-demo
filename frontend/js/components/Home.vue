@@ -18,7 +18,7 @@
         },
         methods: {},
         mounted() {
-            console.log(auth.user());
+
         }
     };
 </script>

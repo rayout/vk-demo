@@ -31,4 +31,19 @@ class UserModel extends Model
     {
         return password_hash($password, PASSWORD_DEFAULT);
     }
+
+    public function getById($id)
+    {
+        return $this->addRole($this->db->row("Select * from {$this->table} where id = {$id}"));
+    }
+
+    public function decreaseBalance($user_id, $balance)
+    {
+        $this->db->update($this->table, [
+            'balance' => $balance
+        ], ['id' => $user_id]);
+
+        return $balance;
+    }
+
 }
