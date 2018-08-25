@@ -8,6 +8,11 @@ use App\models\UserModel;
 
 class AuthController {
 
+    /**
+     * Авторизация
+     * @param Request $request
+     * @param Response $response
+     */
     public function login(Request $request, Response $response){
         $login = $request->get('login');
         $pass = $request->get('pass');

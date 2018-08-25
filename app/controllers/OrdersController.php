@@ -10,7 +10,10 @@ use Core\Response;
 
 
 class OrdersController {
-
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function get(Request $request, Response $response){
         $offset_id = $request->get('offset_id') ? $request->get('offset_id') : 0;
         $limit = $request->get('limit') ? $request->get('limit') : 20;
@@ -24,6 +27,11 @@ class OrdersController {
         }
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
     public function add(Request $request, Response $response)
     {
         $order = [];
@@ -68,6 +76,11 @@ class OrdersController {
         $response->json(['success' => true, 'balance' => $current_balance]);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
     public function execute(Request $request, Response $response)
     {
         $order_id = $request->get('id');
