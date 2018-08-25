@@ -45,7 +45,7 @@ abstract class Model
     }
 
     /**
-     * Грязная функция для замены даных колонки из одного массива на данные колонки из другого массива.
+     * Грязная функция для добавления даных колонки из одного массива в другой на основе связи.
      *
      * @param $data
      * @param $column
@@ -54,16 +54,18 @@ abstract class Model
      * @param $to
      * @return mixed
      */
-    public function replaceColumn($data, $column, $donor, $donor_column, $to)
+    public function addColumn($data, $data_columns, $donor, $donor_columns)
     {
-        $donor_with_keys = [];
-        foreach($donor as $key=>$item){
-            $donor_with_keys[$item[$donor_column]] = $item[$to];
-        }
+        $donor = array_reduce($donor, function($result, $item)use ($donor_columns){
+            $result[$item[key($donor_columns)]] = $item[reset($donor_columns)];
+            return $result;
+        });
 
-        foreach($data as $key=>$item){
-            $data[$key][$column] = $donor_with_keys[$item[$column]];
-        }
+        $data = array_map(function($value) use ($donor, $data_columns){
+            $value[key($data_columns)] = $donor[$value[reset($data_columns)]];
+            return $value;
+        }, $data);
+
         return $data;
     }
 }

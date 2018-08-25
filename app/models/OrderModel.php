@@ -12,13 +12,17 @@ class OrderModel extends Model
 
     public function get($limit, $offset_id)
     {
-        $orders = $this->db->run("select * from {$this->table} where id > ? and executor_user_id is null  ORDER BY id limit ?", $offset_id, $limit);
+        $orders = $this->run("select * from {$this->table} where id > ? and executor_user_id is null  ORDER BY id limit ?", $offset_id, $limit);
+
+        // получаем колонку customer_user_id
         $user_ids = $this->getColumn($orders, 'customer_user_id');
 
+        // запрос за пользователями
         $user_ids_statement = EasyStatement::open()->in('id in (?*)', $user_ids);
         $user_emails = UserModel::getInstance()->run("select id, email from users where {$user_ids_statement}", ...$user_ids);
 
-        $orders = $this->replaceColumn($orders, 'customer_user_id', $user_emails, 'id', 'email');
+        $orders = $this->addColumn($orders, ['customer_email' => 'customer_user_id'], $user_emails, ['id' => 'email']);
+
         return $orders;
     }
 

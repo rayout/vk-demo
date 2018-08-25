@@ -69,6 +69,7 @@ function db($connection = 'db1')
 
 function dd()
 {
+    echo '<pre>';
     $args = func_get_args();
     call_user_func_array('var_dump', $args);
     die();
