@@ -24,7 +24,8 @@ class OrdersController {
         }
     }
 
-    public function add(Request $request, Response $response){
+    public function add(Request $request, Response $response)
+    {
         $order = [];
         $order['title'] = $request->get('title');
         $order['price'] = intval($request->get('price'));
@@ -54,7 +55,7 @@ class OrdersController {
         // получаем текущий баланс и блокируем строку
         $current_balance = UserModel::getInstance()->single("SELECT balance from users where id = ? FOR UPDATE", [auth()->user()->id]);
         // формируем транзакционную запись для истории
-        $transaction = TransactionModel::getInstance()->open(auth()->user(), $order['price']);
+        $transaction = TransactionModel::getInstance()->open(auth()->user(), -$order['price']);
         // добавляем заказ
         OrderModel::getInstance()->addOrder($order);
         // закрываем транзакцию в истории
@@ -62,6 +63,34 @@ class OrdersController {
         //  уменьшаем баланс пользователя
         $current_balance = UserModel::getInstance()->decreaseBalance(auth()->user()->id,$current_balance - $order['price']);
         // закрываем основую транзакцию
+        UserModel::getInstance()->commit();
+
+        $response->json(['success' => true, 'balance' => $current_balance]);
+    }
+
+    public function execute(Request $request, Response $response)
+    {
+        $order_id = $request->get('id');
+        $user_id = auth()->user()->id;
+
+        OrderModel::getInstance()->beginTransaction();
+        $order = OrderModel::getInstance()->row("SELECT * from orders where id = ? FOR UPDATE", $order_id);
+
+        if($order['completed']){
+            OrderModel::getInstance()->commit();
+            return $response->json(['success' => false, 'error' => 'Заказ уже выполнен'], 403);
+        }
+        OrderModel::getInstance()->complete($order_id, $user_id);
+        OrderModel::getInstance()->commit();
+
+        // Изменяем баланс пользователя
+        UserModel::getInstance()->beginTransaction();
+        // формируем транзакционную запись для истории
+        $transaction = TransactionModel::getInstance()->open(auth()->user(), $order['price']);
+        $current_balance = UserModel::getInstance()->single("SELECT balance from users where id = ? FOR UPDATE", [auth()->user()->id]);
+        $current_balance = UserModel::getInstance()->increaseBalance(auth()->user()->id,$current_balance + $order['price']);
+        // закрываем транзакцию в истории
+        TransactionModel::getInstance()->close($transaction);
         UserModel::getInstance()->commit();
 
         $response->json(['success' => true, 'balance' => $current_balance]);

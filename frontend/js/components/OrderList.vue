@@ -85,6 +85,8 @@
                     this.$root.$emit('user', auth.getUser()); // знаю что хрень =/
                     this.order.title = '';
                     this.order.price = '';
+                }).catch((err)=>{
+                    alert(err.response.data.error);
                 });
 
             },
@@ -95,9 +97,15 @@
                 return auth.checkAuth() && auth.getUser().role === 'executor'
             },
             execute(index) {
-                orderService.execute(index).then((res)=>{
+                console.log(this.orderList);
+                let order_id = this.orderList[index].id;
+
+                orderService.execute(order_id).then((res)=>{
                     auth.setBalance(parseFloat(res.data.balance)); //get from server actual balance
                     this.$root.$emit('user', auth.getUser()); // знаю что хрень =/
+                    this.orderList.splice(index, 1)
+                }).catch((err)=>{
+                    alert(err.response.data.error);
                     this.orderList.splice(index, 1)
                 });
 

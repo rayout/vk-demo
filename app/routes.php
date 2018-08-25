@@ -17,6 +17,9 @@ route()::get(
 route()::post(
     '/api/order/add', 'App\controllers\OrdersController@add', [\App\middleware\AuthMiddleware::class]
 );
+route()::post(
+    '/api/order/execute', 'App\controllers\OrdersController@execute', [\App\middleware\AuthMiddleware::class]
+);
 
 route()::get(
     '/api/.*', 'App\controllers\MainController@notFound'

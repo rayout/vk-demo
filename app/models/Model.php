@@ -35,6 +35,11 @@ abstract class Model
         return $this->db->run($statement, ...$params);
     }
 
+    public function row($statement, ...$params)
+    {
+        return $this->db->row($statement, ...$params);
+    }
+
     public function single($statement, $params = [])
     {
         return $this->db->single($statement, $params);

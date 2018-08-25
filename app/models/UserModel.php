@@ -46,4 +46,13 @@ class UserModel extends Model
         return $balance;
     }
 
+    public function increaseBalance($user_id, $balance)
+    {
+        $this->db->update($this->table, [
+            'balance' => $balance
+        ], ['id' => $user_id]);
+
+        return $balance;
+    }
+
 }

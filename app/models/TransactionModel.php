@@ -12,7 +12,7 @@ class TransactionModel extends Model
             'user_id' => $user->id,
             'amount' => $price,
             'balance_from' => $user->balance,
-            'balance_to' => $price < 0 ? $user->balance + $price : $user->balance - $price
+            'balance_to' => $user->balance + $price
         ]);
     }
 

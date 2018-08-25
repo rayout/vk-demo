@@ -30,4 +30,13 @@ class OrderModel extends Model
     {
         return $this->insert($order);
     }
+
+    public function complete($id, $user_id)
+    {
+        return $this->db->update($this->table, [
+            'completed' => true,
+            'executor_user_id' => $user_id
+        ], ['id' => $id]);
+
+    }
 }

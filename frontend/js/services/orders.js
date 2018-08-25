@@ -23,6 +23,15 @@ export default {
                 headers: auth.getAuthHeader()
             }
         )
+    },
+    execute(id) {
+        return axios.post(URL + '/api/order/execute', {
+                id: id,
+            },
+            {
+                headers: auth.getAuthHeader()
+            }
+        )
     }
 
 }
