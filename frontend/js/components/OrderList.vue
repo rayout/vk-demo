@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ order.title }}</h5>
                     <p class="card-text">{{ order.descr }}</p>
-                    <span class="d-block">User: {{ order.customer_user_id }}</span>
+                    <span class="d-block">User: {{ order.customer_email }}</span>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Price: {{ order.price }}</li>
